@@ -1,0 +1,44 @@
+<div id="container">
+	<main>
+		<div id="app">
+			<div id="background"></div>
+			<section class="hero">
+				<div class="wrapper">
+					<h1 class="title">Spannend-<span class="bg-span">Abend</span> Finder</h1>
+					<p class="desc">Finden Sie den besten Film für heute Abend!</p>
+				</div>
+				<div class="slider">
+					<div *ngIf="sliderLoading" class="loading">Loading...</div>
+					@for(movie of movieList; track movie; let i = $index) {
+					<img (click)="changeSlide(i)" class="poster"
+						[ngClass]="{'center': i === currentSliderIndex, 'left': i === currentSliderIndex - 1, 'right': i === currentSliderIndex + 1, 'disappear': i !== currentSliderIndex && i !== currentSliderIndex - 1 && i !== currentSliderIndex + 1}"
+						[src]="movie.poster" alt="" />
+					}
+				</div>
+			</section>
+			<section class="genre-section">
+				<div class="wrapper">
+					<h1>Bevorzugst du ein bestimmtes Genre?</h1>
+				</div>
+				<ul class="genre-list">
+					@for(genre of genreList; track genre; let i = $index) {
+						<li (click)="changeGenre(genre)" class="genre-name" [ngClass]="{'active' : genre === currentGenre}">{{ genre.name }}</li>
+					}
+				</ul>
+				<!-- <select class="movie-select" name="pets" id="pet-select">
+					<option value="">Choose your genre -></option>
+					<option value="comedy">Comedy</option>
+					<option value="drama">Drama</option>
+					<option value="crime">Crime</option>
+					<option value="science-fiction">Science fiction</option>
+					<option value="fantasy">Fantasy</option>
+					<option value="horror">Horror</option>
+					<option value="action">Action</option>
+					<option value="historical">Historical</option>
+					<option value="western">Western</option>
+				</select> -->
+				<!-- <h1>New section</h1> -->
+			</section>
+		</div>
+	</main>
+</div>

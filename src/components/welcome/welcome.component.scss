@@ -56,7 +56,7 @@ main {
 		.genre-name {
 			font-weight: bold;
 			font-size: 2rem;
-			margin: 0 1rem;
+			margin: 0.5rem 1rem;
 			cursor: pointer;
 		}
 		.active {
@@ -96,7 +96,6 @@ li {
 		justify-content: center;
 		align-items: center;
 		// height: 100%;
-		width: 1200px;
 		height: 500px;
 		.poster {
 			position: absolute;
@@ -169,10 +168,56 @@ p {
 }
 
 
-@media screen and (max-height: 368px) {}
-
 @media screen and (max-width: 768px) {
 	h1 {
 		line-height: 1.5;
+	}
+}
+
+@media screen and (max-width: 970px) {
+	.slider {
+		transform: scale(0.8);
+		.right {
+			transform: translate($posterWidth - 50px) !important;
+		}
+		.left {
+			transform: translate(-$posterWidth + 50px) !important;
+		}
+	}
+}
+
+@media screen and (max-width: 670px) {
+	.slider {
+		transform: scale(0.7);
+		.right {
+			transform: translate($posterWidth - 100px) !important;
+		}
+		.left {
+			transform: translate(-$posterWidth + 100px) !important;
+		}
+	}
+}
+
+@media screen and (max-width: 515px) {
+	.slider {
+		transform: scale(0.7);
+		.right {
+			transform: translate($posterWidth - 150px) !important;
+		}
+		.left {
+			transform: translate(-$posterWidth + 150px) !important;
+		}
+	}
+}
+
+@media screen and (max-width: 442px) {
+	.slider {
+		transform: scale(0.6);
+		.right {
+			transform: translate($posterWidth - 150px) !important;
+		}
+		.left {
+			transform: translate(-$posterWidth + 150px) !important;
+		}
 	}
 }

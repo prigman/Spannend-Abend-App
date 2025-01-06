@@ -25,8 +25,6 @@ export class WelcomeComponent {
 
 	genreList: Genre[];
 
-	genreLoading: boolean;
-
 	currentGenre: Genre;
 
 	emptyGenre : Genre
@@ -38,13 +36,16 @@ export class WelcomeComponent {
 	constructor(private movieService : MovieService) {
 		this.localStorageKey = "spannendabendapp-page";
 		this.lastSlide = {
-			title: 'lastSlide',
+			title: '',
+			description: '',
+			genres: [],
+			vote: 0.0,
+			date: '',
 			poster: './next-page.png'
 		};
 		this.movieList = [];
 		this.currentSliderIndex = 0;
 		this.sliderLoading = true;
-		this.genreLoading = true;
 		this.genreList = [];
 		this.emptyGenre = {
 			id: 0,
@@ -96,6 +97,7 @@ export class WelcomeComponent {
 			this.movieList = movieList;
 		}).catch(error => console.log(error)).finally(() => {
 			this.setMovieList(page, (this.currentGenre === this.emptyGenre) ? true : false);
+			// console.log(this.movieList);
 		});
 	}
 
@@ -108,10 +110,9 @@ export class WelcomeComponent {
 	}
 
 	setGenreList(): void {
-		this.genreLoading = true;
 		this.movieService.getGenreList().then(genreList => {
 			this.genreList = genreList;
-		}).catch(error => console.log(error)).finally(() => this.genreLoading = false);
+		}).catch(error => console.log(error));
 	}
 
 	getPageNumberFromStorage(): number {
@@ -122,6 +123,17 @@ export class WelcomeComponent {
 		if (typeof localStorage === 'undefined')
 			return;
 		localStorage.setItem(this.localStorageKey, JSON.stringify(page));
+	}
+
+	scrollToTarget(index: number): void {
+		if(index !== this.currentSliderIndex) return;
+		const targetElement = document.querySelector('.movie-details');
+		if (targetElement) {
+			targetElement.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+			});
+		}
 	}
 
 }

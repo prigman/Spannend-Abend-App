@@ -46,6 +46,62 @@ main {
 	font-size: 3rem;
 }
 
+.movie-details {
+	margin-bottom: 4rem;
+	h1 {
+		text-align: center;
+		margin-bottom: 4rem;
+	}
+	.container {
+		max-width: 1400px;
+		display: flex;
+		flex-wrap: wrap;
+    justify-content: flex-start;
+		img {
+			width: $posterWidth*1.3;
+			height: $posterHeigth*1.3;
+		}
+		.wrapper {
+			max-width: 950px;
+			margin-left: 2rem;
+			.span-first {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				margin-bottom: 0.5rem;
+				// font-weight: bold;
+				.title {
+					color: $mainColor;
+				}
+				.vote {
+					font-size: 1.3rem;
+					margin: .5em 0;
+					span {
+						color: white;
+						font-size: 2rem;
+						margin-left: 1rem;
+						background-color: $mainColor;
+						padding: 10px 15px;
+						border-radius: 1rem;
+					}
+				}
+			}
+			.span-second {
+				margin-bottom: 1rem;
+				display: flex;
+				flex-wrap: wrap;
+				h3 {
+					font-weight: normal;
+					margin-right: 1rem;
+				}
+			}
+			p {
+				line-height: 1.5;
+			}
+		}
+	}
+}
+
 .genre-section {
 	text-align: center;
 	.genre-list {
@@ -53,6 +109,7 @@ main {
 		justify-content: center;
 		align-items: center;
 		flex-wrap: wrap;
+		margin-bottom: 4rem;
 		.genre-name {
 			font-weight: bold;
 			font-size: 2rem;
@@ -133,7 +190,6 @@ button {
 				z-index: 3;
 			}
 			.btn-show {
-				opacity: .65;
 				transform: none;
 			}
 			.btn-disappear {
@@ -190,9 +246,13 @@ h1 {
 }
 
 h2 {
-	font-weight: normal;
 	color: white;
 	font-size: 2rem;
+	margin: 0;
+}
+
+h3 {
+	color: white;
 	margin: 0;
 }
 
@@ -204,12 +264,17 @@ p {
 	margin: 0;
 }
 
-
-@media screen and (max-width: 768px) {
-	h1 {
-		line-height: 1.5;
+@media screen and (max-width: 1400px) {
+	.movie-details{
+		.container {
+			justify-content: center;
+			.wrapper {
+				margin-top: 3rem;
+			}
+		}
 	}
 }
+
 
 @media screen and (max-width: 990px) {
 	.slider {
@@ -220,6 +285,12 @@ p {
 		.left {
 			transform: translate(-$posterWidth + 50px) !important;
 		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+	h1 {
+		line-height: 1.5;
 	}
 }
 

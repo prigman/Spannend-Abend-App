@@ -1,5 +1,9 @@
 export interface Movie {
 	title: string,
+	description: string,
+	genres: Array<string>,
+	vote: number,
+	date: string,
 	poster: string
 }
 
@@ -12,6 +16,6 @@ export interface Header {
 }
 
 export interface Genre {
-  id: number;
-  name: string;
+  id: number,
+  name: string,
 }

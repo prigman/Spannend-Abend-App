@@ -153,16 +153,13 @@ button {
 
 .hero {
 	margin-bottom: 2rem;
-	// margin: 5em 0;
-	// text-align: center;
-	// padding-top: 5%;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 	
 	// height: 100vh;
 	.wrapper {
-		margin-top: 1rem;
+		margin: 1rem 0;
 		text-align: center;
 		
 		.desc,.title {

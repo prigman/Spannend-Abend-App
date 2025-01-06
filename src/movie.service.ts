@@ -20,9 +20,12 @@ export class MovieService {
 		}
 	}
 
-	async getTrendingMovies(page: number): Promise<Movie[]> {
+	async getMoviesFromAPI(page: number, genreId: number = 0): Promise<Movie[]> {
 		try {
-			const response = await fetch(`https://api.themoviedb.org/3/trending/movie/week?language=en-US&page=${page}`, this.options);
+			let response : Response;
+			(genreId === 0) 
+			? response = await fetch(`https://api.themoviedb.org/3/trending/movie/week?language=en-US&page=${page}`, this.options) 
+			: response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${genreId}`, this.options);
 			const data = await response.json();
 			return data.results.map(({ title, poster_path }: { title: string; poster_path: string }) => ({
 				title,
@@ -35,22 +38,7 @@ export class MovieService {
 		}
 	}
 
-	async getMoviesByGenre(page: number, genreId: number): Promise<Movie[]> {
-		try {
-			const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${genreId}`, this.options);
-			const data = await response.json();
-			return data.results.map(({ title, poster_path }: { title: string; poster_path: string }) => ({
-				title,
-				poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
-			}));
-		} 
-		catch (error) {
-			console.log(error);
-			return [];
-		}
-	}
-
-	async getGenres(): Promise<Genre[]> {
+	async getGenreList(): Promise<Genre[]> {
     try {
       const response = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en-US', this.options);
       const data = await response.json();

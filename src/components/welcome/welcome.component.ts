@@ -25,9 +25,15 @@ export class WelcomeComponent {
 
 	genreList: Genre[];
 
+	genreLoading: boolean;
+
 	currentGenre: Genre;
 
+	emptyGenre : Genre
+
 	currentGenrePage: number;
+
+	currentLocalStoragePage: number;
 
 	constructor(private movieService : MovieService) {
 		this.localStorageKey = "spannendabendapp-page";
@@ -38,27 +44,34 @@ export class WelcomeComponent {
 		this.movieList = [];
 		this.currentSliderIndex = 0;
 		this.sliderLoading = true;
+		this.genreLoading = true;
 		this.genreList = [];
-		this.currentGenre = {
+		this.emptyGenre = {
 			id: 0,
 			name: ''
-		};
+		}
+		this.currentGenre = this.emptyGenre;
 		this.currentGenrePage = 1;
+		this.currentLocalStoragePage = this.getPageNumberFromStorage();
+		
 	}
 
 	ngOnInit(): void {
-		this.loadMovies(this.getPageNumberFromStorage());
+		this.loadMovies(this.currentLocalStoragePage);
 		this.setGenreList();
 	}
 
 	changeSlide(index: number): void {
 		if(this.currentSliderIndex === this.movieList.length-1 && index === this.currentSliderIndex){
-			const page: number = this.getPageNumberFromStorage() + 1;
-			if(this.currentGenre.name === '')
-				this.loadMovies(page);
-			else
-				this.currentGenrePage+=1;
-				this.loadMoviesByGenre(this.currentGenrePage, this.currentGenre.id);
+			this.sliderLoading = true;
+			(this.currentLocalStoragePage !== 500) ? this.currentLocalStoragePage+=1 : this.currentLocalStoragePage = 1;
+			if(this.currentGenre === this.emptyGenre){
+				this.loadMovies(this.currentLocalStoragePage);
+			}
+			else {
+				(this.currentGenrePage !== 500) ? this.currentGenrePage+=1 : this.currentGenrePage = 1;
+				this.loadMovies(this.currentGenrePage);
+			}
 		}
 		else {
 			this.currentSliderIndex = index;
@@ -66,39 +79,39 @@ export class WelcomeComponent {
 	}
 
 	changeGenre(genre: Genre): void {
-		this.currentGenre = genre;
-		this.currentGenrePage = 1;
-		this.loadMoviesByGenre(1, genre.id);
+		this.sliderLoading = true;
+		if (genre === this.currentGenre){
+			this.currentGenre = this.emptyGenre;
+			this.loadMovies(this.currentLocalStoragePage);
+		}
+		else {
+			this.currentGenre = genre;
+			this.currentGenrePage = 1;
+			this.loadMovies(this.currentGenrePage);
+		}
 	}
 
 	loadMovies(page: number): void {
-		this.movieService.getTrendingMovies(page).then(movieList => {
+		this.movieService.getMoviesFromAPI(page, this.currentGenre.id).then(movieList => {
 			this.movieList = movieList;
 		}).catch(error => console.log(error)).finally(() => {
-			this.setMovieList(page, false);
+			this.setMovieList(page, (this.currentGenre === this.emptyGenre) ? true : false);
 		});
 	}
 
-	loadMoviesByGenre(page: number, genreId: number): void {
-		this.movieService.getMoviesByGenre(page, genreId).then(movieList => {
-			this.movieList = movieList;
-		}).catch(error => console.log(error)).finally(() => {
-			this.setMovieList(page, true);
-		});
-	}
-
-	setMovieList(page: number, isGenre: boolean): void {
+	setMovieList(page: number, byPopular: boolean): void {
 		this.movieList.push(this.lastSlide);
 		this.sliderLoading = false;
 		this.currentSliderIndex = 0;
-		if(!isGenre)
+		if(byPopular)
 			this.updateLocalStorage(page);
 	}
 
 	setGenreList(): void {
-		this.movieService.getGenres().then(genreList => {
+		this.genreLoading = true;
+		this.movieService.getGenreList().then(genreList => {
 			this.genreList = genreList;
-		}).catch(error => console.log(error));
+		}).catch(error => console.log(error)).finally(() => this.genreLoading = false);
 	}
 
 	getPageNumberFromStorage(): number {

@@ -9,10 +9,11 @@
 				</div>
 				<div class="slider">
 					<div *ngIf="sliderLoading" class="loading">Loading...</div>
-					@for(movie of movieList; track movie; let i = $index) {
-					<img (click)="changeSlide(i)" class="poster"
-						[ngClass]="{'center': i === currentSliderIndex, 'left': i === currentSliderIndex - 1, 'right': i === currentSliderIndex + 1, 'disappear': i !== currentSliderIndex && i !== currentSliderIndex - 1 && i !== currentSliderIndex + 1}"
-						[src]="movie.poster" alt="" />
+					@for(movie of (!sliderLoading ? movieList : []); track movie; let i = $index) {
+						<div (click)="changeSlide(i)" class="poster-wrapper" [ngClass]="{'center': i === currentSliderIndex, 'left': i === currentSliderIndex - 1, 'right': i === currentSliderIndex + 1, 'disappear': i !== currentSliderIndex && i !== currentSliderIndex - 1 && i !== currentSliderIndex + 1}">
+							<img class="poster" [src]="movie.poster" alt="" />
+							<!-- <button class="poster-btn" [ngClass]="{'btn-show': i === currentSliderIndex, 'btn-disappear': i !== currentSliderIndex, 'btn-last': i === movieList.length-1}" [ngStyle]="{'right': i === movieList.length-1 ? '27%' : '21%'}"> {{ i === movieList.length-1 ? "Klicke!" : "Mehr Info" }}</button> -->
+						</div>
 					}
 				</div>
 			</section>
@@ -21,24 +22,17 @@
 					<h1>Bevorzugst du ein bestimmtes Genre?</h1>
 				</div>
 				<ul class="genre-list">
-					@for(genre of genreList; track genre; let i = $index) {
+					<div *ngIf="genreLoading" class="loading">Loading...</div>
+					@for(genre of (!genreLoading ? genreList : []); track genre; let i = $index) {
 						<li (click)="changeGenre(genre)" class="genre-name" [ngClass]="{'active' : genre === currentGenre}">{{ genre.name }}</li>
 					}
 				</ul>
-				<!-- <select class="movie-select" name="pets" id="pet-select">
-					<option value="">Choose your genre -></option>
-					<option value="comedy">Comedy</option>
-					<option value="drama">Drama</option>
-					<option value="crime">Crime</option>
-					<option value="science-fiction">Science fiction</option>
-					<option value="fantasy">Fantasy</option>
-					<option value="horror">Horror</option>
-					<option value="action">Action</option>
-					<option value="historical">Historical</option>
-					<option value="western">Western</option>
-				</select> -->
-				<!-- <h1>New section</h1> -->
 			</section>
+			<!-- <section class="movie-details">
+				<div class="wrapper">
+					<img *ngIf="movieList.length > 0 && movieList[currentSliderIndex]" class="poster" [src]="movieList[currentSliderIndex].poster" alt="">
+				</div>
+			</section> -->
 		</div>
 	</main>
 </div>

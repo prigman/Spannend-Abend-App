@@ -33,7 +33,7 @@ export class WelcomeComponent {
 		this.localStorageKey = "spannendabendapp-page";
 		this.lastSlide = {
 			title: 'lastSlide',
-			poster: 'assets/next-page.png'
+			poster: './next-page.png'
 		};
 		this.movieList = [];
 		this.currentSliderIndex = 0;

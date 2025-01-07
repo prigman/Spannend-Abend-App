@@ -54,7 +54,6 @@ export class WelcomeComponent {
 		this.currentGenre = this.emptyGenre;
 		this.currentGenrePage = 1;
 		this.currentLocalStoragePage = this.getPageNumberFromStorage();
-		
 	}
 
 	ngOnInit(): void {
@@ -64,15 +63,17 @@ export class WelcomeComponent {
 
 	changeSlide(index: number): void {
 		if(this.currentSliderIndex === this.movieList.length-1 && index === this.currentSliderIndex){
+			let page: number = 1;
 			this.sliderLoading = true;
-			(this.currentLocalStoragePage !== 500) ? this.currentLocalStoragePage+=1 : this.currentLocalStoragePage = 1;
 			if(this.currentGenre === this.emptyGenre){
-				this.loadMovies(this.currentLocalStoragePage);
+				(this.currentLocalStoragePage !== 500) ? this.currentLocalStoragePage+=1 : this.currentLocalStoragePage = 1;
+				page = this.currentLocalStoragePage;
 			}
 			else {
 				(this.currentGenrePage !== 500) ? this.currentGenrePage+=1 : this.currentGenrePage = 1;
-				this.loadMovies(this.currentGenrePage);
+				page = this.currentGenrePage;
 			}
+			this.loadMovies(page);
 		}
 		else {
 			this.currentSliderIndex = index;
@@ -80,32 +81,33 @@ export class WelcomeComponent {
 	}
 
 	changeGenre(genre: Genre): void {
+		let page: number = 1;
 		this.sliderLoading = true;
 		if (genre === this.currentGenre){
 			this.currentGenre = this.emptyGenre;
-			this.loadMovies(this.currentLocalStoragePage);
+			page = this.currentLocalStoragePage;
 		}
 		else {
 			this.currentGenre = genre;
 			this.currentGenrePage = 1;
-			this.loadMovies(this.currentGenrePage);
+			page = this.currentGenrePage
 		}
+		this.loadMovies(page);
 	}
 
 	loadMovies(page: number): void {
 		this.movieService.getMoviesFromAPI(page, this.currentGenre.id).then(movieList => {
 			this.movieList = movieList;
 		}).catch(error => console.log(error)).finally(() => {
-			this.setMovieList(page, (this.currentGenre === this.emptyGenre) ? true : false);
-			// console.log(this.movieList);
+			this.setMovieList(page);
 		});
 	}
 
-	setMovieList(page: number, byPopular: boolean): void {
+	setMovieList(page: number): void {
 		this.movieList.push(this.lastSlide);
 		this.sliderLoading = false;
 		this.currentSliderIndex = 0;
-		if(byPopular)
+		if(this.currentGenre === this.emptyGenre)
 			this.updateLocalStorage(page);
 	}
 

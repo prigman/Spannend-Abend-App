@@ -33,15 +33,14 @@ export class MovieService {
 			: response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=de-DE&page=${page}&sort_by=popularity.desc&with_genres=${genreId}`, this.options);
 			const data = await response.json();
 			// console.log(data.results);
-			return data.results.map(({ title, overview, genre_ids, vote_average, release_date, poster_path }: { title: string; overview: string; genre_ids : Array<number>; vote_average: number; release_date: string; poster_path: string }) => {
-				return ({
+			return data.results.map(({ title, overview, genre_ids, vote_average, release_date, poster_path }: { title: string; overview: string; genre_ids : Array<number>; vote_average: number; release_date: string; poster_path: string }) => ({
 				title: title,
 				description: overview,
 				vote: vote_average,
 				genres: this.convertGenreIdsToNames(genre_ids),
 				date: this.convertDateToDDMMYY(release_date),
 				poster: `https://image.tmdb.org/t/p/w500${poster_path}`,
-			})});
+			}));
 		} 
 		catch (error) {
 			console.log(error);

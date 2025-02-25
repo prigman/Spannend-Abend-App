@@ -59,6 +59,10 @@ export class WelcomeComponent {
 	ngOnInit(): void {
 		this.loadMovies(this.currentLocalStoragePage);
 		this.setGenreList();
+		if (typeof document !== "undefined") {
+			document.querySelectorAll("link[rel='stylesheet']").forEach((el) => el.remove());
+		}
+		
 	}
 
 	changeSlide(index: number): void {
